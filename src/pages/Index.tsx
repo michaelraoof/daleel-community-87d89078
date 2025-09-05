@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,6 +9,7 @@ import { sampleServices, categories } from "@/data/services";
 import { Search, Plus, Users, CheckCircle, BookOpen } from "lucide-react";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -19,8 +21,7 @@ const Index = () => {
   });
 
   const handleServiceClick = (serviceId: string) => {
-    // TODO: Navigate to service detail page
-    console.log("Navigate to service:", serviceId);
+    navigate(`/service/${serviceId}`);
   };
 
   return (
@@ -43,7 +44,12 @@ const Index = () => {
               <Search className="w-5 h-5 mr-2" />
               Browse Services
             </Button>
-            <Button size="lg" variant="outline" className="px-8 py-3 bg-white/10 border-white/30 text-white hover:bg-white/20">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="px-8 py-3 bg-white/10 border-white/30 text-white hover:bg-white/20"
+              onClick={() => navigate("/share-experience")}
+            >
               <Plus className="w-5 h-5 mr-2" />
               Share Experience
             </Button>
@@ -141,7 +147,7 @@ const Index = () => {
                 <p className="text-muted-foreground text-lg mb-4">
                   No services found matching your criteria.
                 </p>
-                <Button variant="outline">
+                <Button variant="outline" onClick={() => navigate("/share-experience")}>
                   <Plus className="w-4 h-4 mr-2" />
                   Be the first to share this experience
                 </Button>
@@ -161,7 +167,12 @@ const Index = () => {
             Share your experience and save someone else hours of frustration. 
             Every contribution makes a difference.
           </p>
-          <Button size="lg" variant="secondary" className="px-8 py-3">
+          <Button 
+            size="lg" 
+            variant="secondary" 
+            className="px-8 py-3"
+            onClick={() => navigate("/share-experience")}
+          >
             <Plus className="w-5 h-5 mr-2" />
             Share Your Experience
           </Button>

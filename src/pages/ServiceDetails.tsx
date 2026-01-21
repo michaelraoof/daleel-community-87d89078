@@ -4,11 +4,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { sampleServices } from "@/data/services";
-import { ArrowLeft, MapPin, Building, Clock, ThumbsUp, FileText, DollarSign, CheckCircle, AlertCircle, User, Calendar } from "lucide-react";
+import { ArrowLeft, ArrowRight, MapPin, Building, Clock, ThumbsUp, FileText, DollarSign, CheckCircle, AlertCircle, User, Calendar } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitch } from "@/components/LanguageSwitch";
 
 const ServiceDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { t, isRTL } = useLanguage();
   
   const service = sampleServices.find(s => s.id === id);
   
@@ -22,7 +25,7 @@ const ServiceDetails = () => {
               The service you're looking for doesn't exist.
             </p>
             <Button onClick={() => navigate("/")}>
-              Back to Home
+              {t('details.backToServices')}
             </Button>
           </CardContent>
         </Card>
@@ -58,10 +61,35 @@ const ServiceDetails = () => {
     }
   };
 
+  const getDifficultyTranslation = (difficulty: string) => {
+    switch (difficulty.toLowerCase()) {
+      case 'easy':
+        return t('share.easy');
+      case 'medium':
+        return t('share.medium');
+      case 'hard':
+        return t('share.hard');
+      default:
+        return difficulty;
+    }
+  };
+
+  const getCategoryTranslation = (categoryName: string) => {
+    const key = `category.${categoryName.toLowerCase()}`;
+    return t(key);
+  };
+
+  const BackArrow = isRTL ? ArrowRight : ArrowLeft;
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-accent py-8 px-4">
+      <div className="bg-gradient-to-r from-primary to-accent py-8 px-4 relative">
+        {/* Language Switch */}
+        <div className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'}`}>
+          <LanguageSwitch />
+        </div>
+        
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center mb-4">
             <Button
@@ -70,8 +98,8 @@ const ServiceDetails = () => {
               onClick={() => navigate("/")}
               className="bg-white/10 border-white/30 text-white hover:bg-white/20"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Services
+              <BackArrow className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+              {t('details.backToServices')}
             </Button>
           </div>
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -80,7 +108,7 @@ const ServiceDetails = () => {
                 {service.title}
               </h1>
               <div className="flex items-center text-white/90 mb-4">
-                <Building className="w-5 h-5 mr-2" />
+                <Building className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
                 <span>{service.institution}</span>
               </div>
             </div>
@@ -88,7 +116,7 @@ const ServiceDetails = () => {
               variant="secondary" 
               className={`w-fit ${getCategoryColor(service.category)}`}
             >
-              {service.category}
+              {getCategoryTranslation(service.category)}
             </Badge>
           </div>
         </div>
@@ -105,7 +133,7 @@ const ServiceDetails = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <FileText className="w-5 h-5" />
-                    Service Information
+                    {t('details.overview')}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -115,20 +143,20 @@ const ServiceDetails = () => {
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="flex items-center text-sm">
-                      <Clock className="w-4 h-4 mr-2 text-muted-foreground" />
+                      <Clock className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'} text-muted-foreground`} />
                       <span>{service.averageTime}</span>
                     </div>
                     <div className="flex items-center text-sm">
-                      <MapPin className="w-4 h-4 mr-2 text-muted-foreground" />
+                      <MapPin className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'} text-muted-foreground`} />
                       <span>{service.location}</span>
                     </div>
                     <div className="flex items-center text-sm">
-                      <ThumbsUp className="w-4 h-4 mr-2 text-muted-foreground" />
-                      <span>{service.upvotes} upvotes</span>
+                      <ThumbsUp className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'} text-muted-foreground`} />
+                      <span>{service.upvotes} {t('details.helpful')}</span>
                     </div>
                     <div className="flex items-center text-sm">
-                      <FileText className="w-4 h-4 mr-2 text-muted-foreground" />
-                      <span>{service.experienceCount} experiences</span>
+                      <FileText className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'} text-muted-foreground`} />
+                      <span>{service.experienceCount} {t('services.experiences')}</span>
                     </div>
                   </div>
                 </CardContent>
@@ -136,9 +164,9 @@ const ServiceDetails = () => {
 
               {/* Experiences */}
               <div className="space-y-4">
-                <h2 className="text-2xl font-bold">Community Experiences</h2>
+                <h2 className="text-2xl font-bold">{t('details.experiences')}</h2>
                 {service.experiences.map((experience) => (
-                  <Card key={experience.id} className="border-l-4 border-l-primary">
+                  <Card key={experience.id} className={`${isRTL ? 'border-r-4 border-r-primary' : 'border-l-4 border-l-primary'}`}>
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-3">
@@ -150,10 +178,10 @@ const ServiceDetails = () => {
                             variant="secondary" 
                             className={getDifficultyColor(experience.difficulty)}
                           >
-                            {experience.difficulty}
+                            {getDifficultyTranslation(experience.difficulty)}
                           </Badge>
                         </div>
-                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <div className={`flex items-center gap-4 text-sm text-muted-foreground ${isRTL ? 'flex-row-reverse' : ''}`}>
                           <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
                             <span>{experience.date}</span>
@@ -170,9 +198,9 @@ const ServiceDetails = () => {
                       <div>
                         <h4 className="font-semibold mb-2 flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-success" />
-                          Required Documents
+                          {t('details.requiredDocuments')}
                         </h4>
-                        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-6">
+                        <ul className={`list-disc space-y-1 text-sm text-muted-foreground ${isRTL ? 'mr-6 list-inside' : 'ml-6 list-inside'}`}>
                           {experience.requiredDocuments.map((doc, index) => (
                             <li key={index}>{doc}</li>
                           ))}
@@ -186,9 +214,9 @@ const ServiceDetails = () => {
                         <div>
                           <h4 className="font-semibold mb-2 flex items-center gap-2">
                             <DollarSign className="w-4 h-4 text-accent" />
-                            Fees
+                            {t('details.fees')}
                           </h4>
-                          <p className="text-sm text-muted-foreground ml-6">{experience.fees}</p>
+                          <p className={`text-sm text-muted-foreground ${isRTL ? 'mr-6' : 'ml-6'}`}>{experience.fees}</p>
                         </div>
                       )}
 
@@ -198,9 +226,9 @@ const ServiceDetails = () => {
                       <div>
                         <h4 className="font-semibold mb-2 flex items-center gap-2">
                           <FileText className="w-4 h-4 text-primary" />
-                          Process
+                          {t('details.process')}
                         </h4>
-                        <p className="text-sm text-muted-foreground leading-relaxed ml-6">
+                        <p className={`text-sm text-muted-foreground leading-relaxed ${isRTL ? 'mr-6' : 'ml-6'}`}>
                           {experience.process}
                         </p>
                       </div>
@@ -212,9 +240,9 @@ const ServiceDetails = () => {
                           <div>
                             <h4 className="font-semibold mb-2 flex items-center gap-2">
                               <AlertCircle className="w-4 h-4 text-warning" />
-                              Tips & Advice
+                              {t('details.tips')}
                             </h4>
-                            <p className="text-sm text-muted-foreground leading-relaxed ml-6">
+                            <p className={`text-sm text-muted-foreground leading-relaxed ${isRTL ? 'mr-6' : 'ml-6'}`}>
                               {experience.tips}
                             </p>
                           </div>
@@ -231,26 +259,26 @@ const ServiceDetails = () => {
               {/* Quick Stats */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Quick Stats</CardTitle>
+                  <CardTitle className="text-lg">{t('details.overview')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Community Rating</span>
+                    <span className="text-sm text-muted-foreground">{t('details.helpful')}</span>
                     <div className="flex items-center gap-1">
                       <ThumbsUp className="w-4 h-4 text-success" />
                       <span className="font-medium">{service.upvotes}</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Experiences Shared</span>
+                    <span className="text-sm text-muted-foreground">{t('details.experiences')}</span>
                     <span className="font-medium">{service.experienceCount}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Last Updated</span>
+                    <span className="text-sm text-muted-foreground">{t('details.lastUpdated')}</span>
                     <span className="font-medium">{service.lastUpdated}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Average Time</span>
+                    <span className="text-sm text-muted-foreground">{t('details.averageTime')}</span>
                     <span className="font-medium">{service.averageTime}</span>
                   </div>
                 </CardContent>
@@ -259,17 +287,14 @@ const ServiceDetails = () => {
               {/* Actions */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Help the Community</CardTitle>
+                  <CardTitle className="text-lg">{t('details.shareExperience')}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button 
                     className="w-full" 
                     onClick={() => navigate("/share-experience")}
                   >
-                    Share Your Experience
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    Report Issue
+                    {t('details.shareExperience')}
                   </Button>
                 </CardContent>
               </Card>

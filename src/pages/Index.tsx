@@ -7,42 +7,57 @@ import { Badge } from "@/components/ui/badge";
 import { ServiceCard } from "@/components/ServiceCard";
 import { sampleServices, categories } from "@/data/services";
 import { Search, Plus, Users, CheckCircle, BookOpen } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSwitch } from "@/components/LanguageSwitch";
 
 const Index = () => {
   const navigate = useNavigate();
+  const { t, isRTL } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredServices = sampleServices.filter(service => {
-    const matchesCategory = selectedCategory === "All" || service.category === selectedCategory;
-    const matchesSearch = service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         service.institution.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredServices = sampleServices.filter((service) => {
+    const matchesCategory =
+      selectedCategory === "All" || service.category === selectedCategory;
+    const matchesSearch =
+      service.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      service.institution.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      service.location.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
-  const handleServiceClick = (serviceId: string) => {
-    navigate(`/service/${serviceId}`);
+  const handleServiceClick = (id: string) => {
+    navigate(`/service/${id}`);
+  };
+
+  const getCategoryTranslation = (categoryName: string) => {
+    const key = `category.${categoryName.toLowerCase()}`;
+    return t(key);
   };
 
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <div className="relative bg-gradient-to-br from-primary via-primary-hover to-accent py-20 px-4">
+        {/* Language Switch */}
+        <div className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'}`}>
+          <LanguageSwitch />
+        </div>
+        
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            دليل
+            {t('hero.title')}
             <span className="block text-2xl md:text-3xl font-normal mt-2 opacity-90">
-              Your Guide to Every Service
+              {t('hero.subtitle')}
             </span>
           </h1>
           <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Never waste time on bureaucracy again. Find real experiences from people who've been there, 
-            shared by the community to help you navigate any service or errand with confidence.
+            {t('hero.description')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" variant="secondary" className="px-8 py-3">
-              <Search className="w-5 h-5 mr-2" />
-              Browse Services
+              <Search className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+              {t('hero.browseServices')}
             </Button>
             <Button 
               size="lg" 
@@ -50,87 +65,79 @@ const Index = () => {
               className="px-8 py-3 bg-white/10 border-white/30 text-white hover:bg-white/20"
               onClick={() => navigate("/share-experience")}
             >
-              <Plus className="w-5 h-5 mr-2" />
-              Share Experience
+              <Plus className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+              {t('hero.shareExperience')}
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="py-12 bg-muted/30">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="flex items-center justify-center w-16 h-16 bg-primary-light rounded-full mx-auto mb-4">
-                <BookOpen className="w-8 h-8 text-primary" />
+      {/* Stats Bar */}
+      <div className="bg-card border-b border-border">
+        <div className="max-w-6xl mx-auto py-8 px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div className="flex flex-col items-center">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-light mb-3">
+                <BookOpen className="w-6 h-6 text-primary" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-2">
-                {sampleServices.length}+ Services
-              </h3>
-              <p className="text-muted-foreground">
-                Documented processes and experiences
-              </p>
+              <div className="text-3xl font-bold text-foreground">150+</div>
+              <div className="text-muted-foreground">{t('stats.sharedExperiences')}</div>
             </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center w-16 h-16 bg-accent-light rounded-full mx-auto mb-4">
-                <Users className="w-8 h-8 text-accent" />
+            <div className="flex flex-col items-center">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-success-light mb-3">
+                <CheckCircle className="w-6 h-6 text-success" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-2">
-                {sampleServices.reduce((acc, service) => acc + service.experienceCount, 0)}+ Experiences
-              </h3>
-              <p className="text-muted-foreground">
-                Real stories from real people
-              </p>
+              <div className="text-3xl font-bold text-foreground">500+</div>
+              <div className="text-muted-foreground">{t('stats.verifiedTips')}</div>
             </div>
-            <div className="text-center">
-              <div className="flex items-center justify-center w-16 h-16 bg-success-light rounded-full mx-auto mb-4">
-                <CheckCircle className="w-8 h-8 text-success" />
+            <div className="flex flex-col items-center">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-accent-light mb-3">
+                <Users className="w-6 h-6 text-accent" />
               </div>
-              <h3 className="text-2xl font-bold text-foreground mb-2">
-                {sampleServices.reduce((acc, service) => acc + service.upvotes, 0)}+ Upvotes
-              </h3>
-              <p className="text-muted-foreground">
-                Community-verified information
-              </p>
+              <div className="text-3xl font-bold text-foreground">1,200+</div>
+              <div className="text-muted-foreground">{t('stats.helpingOthers')}</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Search and Filter Section */}
+      {/* Search and Categories */}
       <div className="py-12 px-4">
         <div className="max-w-6xl mx-auto">
+          {/* Search Bar */}
+          <div className="relative mb-8">
+            <Search className={`absolute ${isRTL ? 'right-4' : 'left-4'} top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5`} />
+            <Input
+              placeholder={t('search.placeholder')}
+              className={`${isRTL ? 'pr-12' : 'pl-12'} py-6 text-lg rounded-xl border-border/50 focus:border-primary`}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {/* Categories */}
           <div className="mb-8">
-            <div className="relative max-w-2xl mx-auto mb-6">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-              <Input
-                placeholder="Search for a service, institution, or location..."
-                className="pl-10 py-3 text-lg"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-            
-            <div className="flex flex-wrap justify-center gap-2">
+            <h2 className="text-2xl font-bold mb-4">{t('categories.title')}</h2>
+            <div className="flex flex-wrap gap-3">
               {categories.map((category) => (
                 <Badge
                   key={category.name}
                   variant={selectedCategory === category.name ? "default" : "secondary"}
-                  className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${
-                    selectedCategory === category.name 
-                      ? "bg-primary text-primary-foreground hover:bg-primary-hover" 
-                      : "hover:bg-secondary/80"
+                  className={`px-4 py-2 cursor-pointer transition-all ${
+                    selectedCategory === category.name
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-secondary hover:bg-secondary/80"
                   }`}
                   onClick={() => setSelectedCategory(category.name)}
                 >
-                  {category.name} ({category.count})
+                  {getCategoryTranslation(category.name)} ({category.count})
                 </Badge>
               ))}
             </div>
           </div>
 
           {/* Services Grid */}
+          <h2 className="text-2xl font-bold mb-6">{t('services.title')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredServices.map((service) => (
               <ServiceCard
@@ -144,40 +151,23 @@ const Index = () => {
           {filteredServices.length === 0 && (
             <Card className="text-center py-12">
               <CardContent>
-                <p className="text-muted-foreground text-lg mb-4">
-                  No services found matching your criteria.
+                <p className="text-muted-foreground text-lg">
+                  {t('services.noResults')}
                 </p>
-                <Button variant="outline" onClick={() => navigate("/share-experience")}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Be the first to share this experience
-                </Button>
               </CardContent>
             </Card>
           )}
         </div>
       </div>
 
-      {/* Call to Action */}
-      <div className="bg-gradient-to-r from-primary to-accent py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Help Others Navigate Bureaucracy
-          </h2>
-          <p className="text-xl text-white/90 mb-8">
-            Share your experience and save someone else hours of frustration. 
-            Every contribution makes a difference.
+      {/* Footer */}
+      <footer className="bg-card border-t border-border py-8 px-4">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-muted-foreground">
+            {t('footer.madeWith')} ❤️ {t('footer.forCommunity')}
           </p>
-          <Button 
-            size="lg" 
-            variant="secondary" 
-            className="px-8 py-3"
-            onClick={() => navigate("/share-experience")}
-          >
-            <Plus className="w-5 h-5 mr-2" />
-            Share Your Experience
-          </Button>
         </div>
-      </div>
+      </footer>
     </div>
   );
 };

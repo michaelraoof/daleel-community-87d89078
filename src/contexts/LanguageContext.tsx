@@ -47,7 +47,18 @@ const translations: Record<Language, Record<string, string>> = {
     'share.title': 'شارك تجربتك',
     'share.subtitle': 'ساعد الآخرين بمشاركة تجربتك مع هذه الخدمة أو المعاملة.',
     'share.backToHome': 'العودة للرئيسية',
-    'share.serviceInfo': 'معلومات الخدمة',
+    
+    // Section titles
+    'share.basicInfoSection': 'المعلومات الأساسية',
+    'share.basicInfoDesc': 'أخبرنا عن الخدمة التي تريد مشاركتها',
+    'share.documentsSection': 'المستندات المطلوبة',
+    'share.documentsDesc': 'ما هي الأوراق التي احتجتها؟',
+    'share.processSection': 'العملية والخطوات',
+    'share.processDesc': 'صف الخطوات التي اتبعتها',
+    'share.additionalSection': 'معلومات إضافية',
+    'share.additionalDesc': 'أضف أي تفاصيل أخرى قد تكون مفيدة',
+    
+    // Form fields
     'share.serviceTitle': 'عنوان الخدمة',
     'share.serviceTitlePlaceholder': 'مثال: تجديد جواز السفر',
     'share.institution': 'المؤسسة/الجهة',
@@ -57,7 +68,11 @@ const translations: Record<Language, Record<string, string>> = {
     'share.category': 'الفئة',
     'share.selectCategory': 'اختر الفئة',
     'share.averageTime': 'الوقت المتوسط',
-    'share.averageTimePlaceholder': 'مثال: ٢-٣ ساعات',
+    'share.selectUnit': 'الوحدة',
+    'share.minutes': 'دقائق',
+    'share.hours': 'ساعات',
+    'share.days': 'أيام',
+    'share.weeks': 'أسابيع',
     'share.difficulty': 'الصعوبة',
     'share.selectDifficulty': 'اختر الصعوبة',
     'share.easy': 'سهل',
@@ -65,14 +80,40 @@ const translations: Record<Language, Record<string, string>> = {
     'share.hard': 'صعب',
     'share.description': 'الوصف',
     'share.descriptionPlaceholder': 'وصف مختصر للخدمة...',
+    
+    // Fees
     'share.fees': 'الرسوم',
-    'share.feesPlaceholder': 'مثال: ٣٦٥ جنيه',
-    'share.requiredDocuments': 'المستندات المطلوبة',
-    'share.addDocument': 'أضف مستند مطلوب...',
-    'share.process': 'الخطوات/العملية',
-    'share.processPlaceholder': 'صف الخطوات التي اتبعتها...',
+    'share.currency': 'العملة',
+    'share.egp': 'ج.م',
+    'share.usd': 'دولار',
+    'share.eur': 'يورو',
+    'share.free': 'مجاني',
+    'share.feesNotePlaceholder': 'ملاحظات على الرسوم (اختياري)',
+    
+    // Documents
+    'share.addDocumentPlaceholder': 'اسم المستند مثال: صورة البطاقة',
+    'share.required': 'مطلوب',
+    'share.optional': 'اختياري',
+    'share.markRequired': 'مطلوب',
+    'share.toggleRequired': 'تبديل',
+    
+    // Steps
+    'share.addStepPlaceholder': 'أضف خطوة...',
+    'share.addStep': 'أضف',
+    
+    // Tips
     'share.tips': 'نصائح وإرشادات',
     'share.tipsPlaceholder': 'أي نصائح مفيدة للآخرين...',
+    
+    // Custom fields
+    'share.customFields': 'حقول إضافية',
+    'share.customFieldsDesc': 'أضف أي معلومات أخرى تريد مشاركتها',
+    'share.addCustomField': 'أضف حقل مخصص',
+    'share.customFieldLabel': 'اسم الحقل',
+    'share.customFieldValue': 'القيمة',
+    'share.addField': 'أضف',
+    
+    // Buttons
     'share.submit': 'شارك التجربة',
     'share.cancel': 'إلغاء',
     'share.successTitle': 'تم مشاركة التجربة بنجاح!',
@@ -140,7 +181,18 @@ const translations: Record<Language, Record<string, string>> = {
     'share.title': 'Share Your Experience',
     'share.subtitle': 'Help others by sharing your experience with this service or errand.',
     'share.backToHome': 'Back to Home',
-    'share.serviceInfo': 'Service Information',
+    
+    // Section titles
+    'share.basicInfoSection': 'Basic Information',
+    'share.basicInfoDesc': 'Tell us about the service you want to share',
+    'share.documentsSection': 'Required Documents',
+    'share.documentsDesc': 'What documents did you need?',
+    'share.processSection': 'Process & Steps',
+    'share.processDesc': 'Describe the steps you followed',
+    'share.additionalSection': 'Additional Information',
+    'share.additionalDesc': 'Add any other details that might be helpful',
+    
+    // Form fields
     'share.serviceTitle': 'Service Title',
     'share.serviceTitlePlaceholder': 'e.g., Passport Renewal',
     'share.institution': 'Institution/Authority',
@@ -150,7 +202,11 @@ const translations: Record<Language, Record<string, string>> = {
     'share.category': 'Category',
     'share.selectCategory': 'Select category',
     'share.averageTime': 'Average Time',
-    'share.averageTimePlaceholder': 'e.g., 2-3 hours',
+    'share.selectUnit': 'Unit',
+    'share.minutes': 'Minutes',
+    'share.hours': 'Hours',
+    'share.days': 'Days',
+    'share.weeks': 'Weeks',
     'share.difficulty': 'Difficulty',
     'share.selectDifficulty': 'Select difficulty',
     'share.easy': 'Easy',
@@ -158,14 +214,40 @@ const translations: Record<Language, Record<string, string>> = {
     'share.hard': 'Hard',
     'share.description': 'Description',
     'share.descriptionPlaceholder': 'Brief description of the service...',
+    
+    // Fees
     'share.fees': 'Fees',
-    'share.feesPlaceholder': 'e.g., 365 EGP',
-    'share.requiredDocuments': 'Required Documents',
-    'share.addDocument': 'Add a required document...',
-    'share.process': 'Process/Steps',
-    'share.processPlaceholder': 'Describe the step-by-step process you followed...',
+    'share.currency': 'Currency',
+    'share.egp': 'EGP',
+    'share.usd': 'USD',
+    'share.eur': 'EUR',
+    'share.free': 'Free',
+    'share.feesNotePlaceholder': 'Notes about fees (optional)',
+    
+    // Documents
+    'share.addDocumentPlaceholder': 'Document name e.g., ID copy',
+    'share.required': 'Required',
+    'share.optional': 'Optional',
+    'share.markRequired': 'Required',
+    'share.toggleRequired': 'Toggle',
+    
+    // Steps
+    'share.addStepPlaceholder': 'Add a step...',
+    'share.addStep': 'Add',
+    
+    // Tips
     'share.tips': 'Tips & Advice',
     'share.tipsPlaceholder': 'Any helpful tips or advice for others...',
+    
+    // Custom fields
+    'share.customFields': 'Custom Fields',
+    'share.customFieldsDesc': 'Add any other information you want to share',
+    'share.addCustomField': 'Add Custom Field',
+    'share.customFieldLabel': 'Field name',
+    'share.customFieldValue': 'Value',
+    'share.addField': 'Add',
+    
+    // Buttons
     'share.submit': 'Share Experience',
     'share.cancel': 'Cancel',
     'share.successTitle': 'Experience Shared Successfully!',

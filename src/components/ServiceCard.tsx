@@ -2,6 +2,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Building, Clock, ThumbsUp, FileText } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ServiceCardProps {
   id: string;
@@ -24,9 +25,10 @@ export const ServiceCard = ({
   upvotes,
   experienceCount,
   averageTime,
-  lastUpdated,
   onClick
 }: ServiceCardProps) => {
+  const { t, isRTL } = useLanguage();
+  
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
       case 'government':
@@ -42,6 +44,11 @@ export const ServiceCard = ({
     }
   };
 
+  const getCategoryTranslation = (categoryName: string) => {
+    const key = `category.${categoryName.toLowerCase()}`;
+    return t(key);
+  };
+
   return (
     <Card 
       className="hover:shadow-[var(--shadow-elevated)] transition-all duration-300 cursor-pointer border border-border/50 hover:border-primary/30"
@@ -54,45 +61,45 @@ export const ServiceCard = ({
           </CardTitle>
           <Badge 
             variant="secondary" 
-            className={`ml-2 ${getCategoryColor(category)}`}
+            className={`${isRTL ? 'mr-2' : 'ml-2'} ${getCategoryColor(category)}`}
           >
-            {category}
+            {getCategoryTranslation(category)}
           </Badge>
         </div>
       </CardHeader>
       
       <CardContent className="space-y-3 pb-4">
         <div className="flex items-center text-muted-foreground text-sm">
-          <Building className="w-4 h-4 mr-2" />
+          <Building className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
           <span>{institution}</span>
         </div>
         
         <div className="flex items-center text-muted-foreground text-sm">
-          <MapPin className="w-4 h-4 mr-2" />
+          <MapPin className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
           <span>{location}</span>
         </div>
         
         <div className="flex items-center text-muted-foreground text-sm">
-          <Clock className="w-4 h-4 mr-2" />
-          <span>Average time: {averageTime}</span>
+          <Clock className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+          <span>{t('services.averageTime')}: {averageTime}</span>
         </div>
       </CardContent>
       
       <CardFooter className="pt-4 border-t border-border/50">
         <div className="flex items-center justify-between w-full">
-          <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse space-x-4' : 'space-x-4'} text-sm text-muted-foreground`}>
             <div className="flex items-center">
-              <ThumbsUp className="w-4 h-4 mr-1" />
+              <ThumbsUp className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
               <span>{upvotes}</span>
             </div>
             <div className="flex items-center">
-              <FileText className="w-4 h-4 mr-1" />
-              <span>{experienceCount} experiences</span>
+              <FileText className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+              <span>{experienceCount} {t('services.experiences')}</span>
             </div>
           </div>
           
-          <Button variant="outline" size="sm" className="ml-2">
-            View Details
+          <Button variant="outline" size="sm" className={isRTL ? 'mr-2' : 'ml-2'}>
+            {t('services.viewDetails')}
           </Button>
         </div>
       </CardFooter>

@@ -37,108 +37,96 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-primary via-primary-hover to-accent py-20 px-4">
-        {/* Language Switch */}
-        <div className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'}`}>
-          <LanguageSwitch />
-        </div>
-        
-        <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-            {t('hero.title')}
-            <span className="block text-2xl md:text-3xl font-normal mt-2 opacity-90">
-              {t('hero.subtitle')}
-            </span>
-          </h1>
-          <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
-            {t('hero.description')}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" variant="secondary" className="px-8 py-3">
-              <Search className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
-              {t('hero.browseServices')}
-            </Button>
+      {/* Compact Header */}
+      <div className="bg-card border-b border-border sticky top-0 z-50">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+              <BookOpen className="w-5 h-5 text-primary-foreground" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-foreground">{t('hero.title')}</h1>
+              <p className="text-xs text-muted-foreground">{t('hero.subtitle')}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
             <Button 
-              size="lg" 
-              variant="outline" 
-              className="px-8 py-3 bg-white/10 border-white/30 text-white hover:bg-white/20"
+              size="sm" 
               onClick={() => navigate("/share-experience")}
+              className="bg-primary hover:bg-primary-hover"
             >
-              <Plus className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+              <Plus className={`w-4 h-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
               {t('hero.shareExperience')}
             </Button>
+            <LanguageSwitch />
           </div>
         </div>
       </div>
 
-      {/* Stats Bar */}
-      <div className="bg-card border-b border-border">
-        <div className="max-w-6xl mx-auto py-8 px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-            <div className="flex flex-col items-center">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-light mb-3">
-                <BookOpen className="w-6 h-6 text-primary" />
-              </div>
-              <div className="text-3xl font-bold text-foreground">150+</div>
-              <div className="text-muted-foreground">{t('stats.sharedExperiences')}</div>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-success-light mb-3">
-                <CheckCircle className="w-6 h-6 text-success" />
-              </div>
-              <div className="text-3xl font-bold text-foreground">500+</div>
-              <div className="text-muted-foreground">{t('stats.verifiedTips')}</div>
-            </div>
-            <div className="flex flex-col items-center">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-accent-light mb-3">
-                <Users className="w-6 h-6 text-accent" />
-              </div>
-              <div className="text-3xl font-bold text-foreground">1,200+</div>
-              <div className="text-muted-foreground">{t('stats.helpingOthers')}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Search and Categories */}
-      <div className="py-12 px-4">
+      {/* Search Section - Prominent */}
+      <div className="bg-secondary/30 border-b border-border py-6 px-4">
         <div className="max-w-6xl mx-auto">
-          {/* Search Bar */}
-          <div className="relative mb-8">
+          <div className="relative max-w-2xl mx-auto">
             <Search className={`absolute ${isRTL ? 'right-4' : 'left-4'} top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5`} />
             <Input
               placeholder={t('search.placeholder')}
-              className={`${isRTL ? 'pr-12' : 'pl-12'} py-6 text-lg rounded-xl border-border/50 focus:border-primary`}
+              className={`${isRTL ? 'pr-12' : 'pl-12'} py-6 text-base rounded-2xl border-border bg-card shadow-sm focus:shadow-md transition-shadow`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-
-          {/* Categories */}
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold mb-4">{t('categories.title')}</h2>
-            <div className="flex flex-wrap gap-3">
+          
+          {/* Horizontal scrolling categories */}
+          <div className="mt-4 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
+            <div className="flex gap-2 min-w-max">
               {categories.map((category) => (
-                <Badge
+                <button
                   key={category.name}
-                  variant={selectedCategory === category.name ? "default" : "secondary"}
-                  className={`px-4 py-2 cursor-pointer transition-all ${
-                    selectedCategory === category.name
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-secondary hover:bg-secondary/80"
-                  }`}
                   onClick={() => setSelectedCategory(category.name)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                    selectedCategory === category.name
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-card text-muted-foreground hover:bg-muted border border-border"
+                  }`}
                 >
                   {getCategoryTranslation(category.name)} ({category.count})
-                </Badge>
+                </button>
               ))}
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* Services Grid */}
-          <h2 className="text-2xl font-bold mb-6">{t('services.title')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      {/* Stats - Inline compact */}
+      <div className="bg-card border-b border-border">
+        <div className="max-w-6xl mx-auto py-3 px-4">
+          <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+            <span className="flex items-center gap-1.5">
+              <BookOpen className="w-4 h-4 text-primary" />
+              <strong className="text-foreground">150+</strong> {t('stats.sharedExperiences')}
+            </span>
+            <span className="hidden sm:flex items-center gap-1.5">
+              <CheckCircle className="w-4 h-4 text-success" />
+              <strong className="text-foreground">500+</strong> {t('stats.verifiedTips')}
+            </span>
+            <span className="hidden md:flex items-center gap-1.5">
+              <Users className="w-4 h-4 text-accent" />
+              <strong className="text-foreground">1,200+</strong> {t('stats.helpingOthers')}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Services Grid - Primary content */}
+      <div className="py-6 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm text-muted-foreground">
+              {filteredServices.length} {t('services.title').toLowerCase()}
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             {filteredServices.map((service) => (
               <ServiceCard
                 key={service.id}
@@ -149,9 +137,10 @@ const Index = () => {
           </div>
 
           {filteredServices.length === 0 && (
-            <Card className="text-center py-12">
-              <CardContent>
-                <p className="text-muted-foreground text-lg">
+            <Card className="text-center py-12 border-dashed">
+              <CardContent className="pt-6">
+                <Search className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
+                <p className="text-muted-foreground">
                   {t('services.noResults')}
                 </p>
               </CardContent>

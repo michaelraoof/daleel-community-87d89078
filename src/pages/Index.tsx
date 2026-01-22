@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { ServiceCard } from "@/components/ServiceCard";
 import { sampleServices, categories } from "@/data/services";
-import { Search, Plus } from "lucide-react";
+import { Search, Plus, Users, CheckCircle, BookOpen } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LanguageSwitch } from "@/components/LanguageSwitch";
 
@@ -35,78 +37,137 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Clean Header */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="text-lg font-semibold text-foreground tracking-tight">
+      {/* Hero Section */}
+      <div className="relative bg-gradient-to-br from-primary via-primary-hover to-accent py-20 px-4">
+        {/* Language Switch */}
+        <div className={`absolute top-4 ${isRTL ? 'left-4' : 'right-4'}`}>
+          <LanguageSwitch />
+        </div>
+        
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
             {t('hero.title')}
+            <span className="block text-2xl md:text-3xl font-normal mt-2 opacity-90">
+              {t('hero.subtitle')}
+            </span>
           </h1>
-          <div className="flex items-center gap-3">
-            <LanguageSwitch />
+          <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto leading-relaxed">
+            {t('hero.description')}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" variant="secondary" className="px-8 py-3">
+              <Search className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+              {t('hero.browseServices')}
+            </Button>
             <Button 
-              size="sm"
+              size="lg" 
+              variant="outline" 
+              className="px-8 py-3 bg-white/10 border-white/30 text-white hover:bg-white/20"
               onClick={() => navigate("/share-experience")}
-              className="rounded-full h-8 w-8 p-0"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
+              {t('hero.shareExperience')}
             </Button>
           </div>
         </div>
-      </header>
+      </div>
 
-      {/* Search Section */}
-      <div className="pt-6 pb-4 px-4">
-        <div className="max-w-2xl mx-auto">
-          {/* Search Bar - iOS style */}
-          <div className="relative mb-4">
-            <Search className={`absolute ${isRTL ? 'right-3' : 'left-3'} top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4`} />
+      {/* Stats Bar */}
+      <div className="bg-card border-b border-border">
+        <div className="max-w-6xl mx-auto py-8 px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div className="flex flex-col items-center">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary-light mb-3">
+                <BookOpen className="w-6 h-6 text-primary" />
+              </div>
+              <div className="text-3xl font-bold text-foreground">150+</div>
+              <div className="text-muted-foreground">{t('stats.sharedExperiences')}</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-success-light mb-3">
+                <CheckCircle className="w-6 h-6 text-success" />
+              </div>
+              <div className="text-3xl font-bold text-foreground">500+</div>
+              <div className="text-muted-foreground">{t('stats.verifiedTips')}</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-accent-light mb-3">
+                <Users className="w-6 h-6 text-accent" />
+              </div>
+              <div className="text-3xl font-bold text-foreground">1,200+</div>
+              <div className="text-muted-foreground">{t('stats.helpingOthers')}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Search and Categories */}
+      <div className="py-12 px-4">
+        <div className="max-w-6xl mx-auto">
+          {/* Search Bar */}
+          <div className="relative mb-8">
+            <Search className={`absolute ${isRTL ? 'right-4' : 'left-4'} top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5`} />
             <Input
               placeholder={t('search.placeholder')}
-              className={`${isRTL ? 'pr-10' : 'pl-10'} h-10 text-sm rounded-xl bg-secondary border-0 focus-visible:ring-1 focus-visible:ring-primary`}
+              className={`${isRTL ? 'pr-12' : 'pl-12'} py-6 text-lg rounded-xl border-border/50 focus:border-primary`}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
 
-          {/* Categories - Horizontal scroll pills */}
-          <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide -mx-4 px-4">
-            {categories.map((category) => (
-              <button
-                key={category.name}
-                onClick={() => setSelectedCategory(category.name)}
-                className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
-                  selectedCategory === category.name
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground active:bg-secondary/70"
-                }`}
-              >
-                {getCategoryTranslation(category.name)}
-              </button>
+          {/* Categories */}
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4">{t('categories.title')}</h2>
+            <div className="flex flex-wrap gap-3">
+              {categories.map((category) => (
+                <Badge
+                  key={category.name}
+                  variant={selectedCategory === category.name ? "default" : "secondary"}
+                  className={`px-4 py-2 cursor-pointer transition-all ${
+                    selectedCategory === category.name
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-secondary hover:bg-secondary/80"
+                  }`}
+                  onClick={() => setSelectedCategory(category.name)}
+                >
+                  {getCategoryTranslation(category.name)} ({category.count})
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {/* Services Grid */}
+          <h2 className="text-2xl font-bold mb-6">{t('services.title')}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredServices.map((service) => (
+              <ServiceCard
+                key={service.id}
+                {...service}
+                onClick={() => handleServiceClick(service.id)}
+              />
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* Services List */}
-      <div className="pb-8 px-4">
-        <div className="max-w-2xl mx-auto space-y-2">
-          {filteredServices.map((service) => (
-            <ServiceCard
-              key={service.id}
-              {...service}
-              onClick={() => handleServiceClick(service.id)}
-            />
-          ))}
 
           {filteredServices.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-muted-foreground text-sm">
-                {t('services.noResults')}
-              </p>
-            </div>
+            <Card className="text-center py-12">
+              <CardContent>
+                <p className="text-muted-foreground text-lg">
+                  {t('services.noResults')}
+                </p>
+              </CardContent>
+            </Card>
           )}
         </div>
       </div>
+
+      {/* Footer */}
+      <footer className="bg-card border-t border-border py-8 px-4">
+        <div className="max-w-6xl mx-auto text-center">
+          <p className="text-muted-foreground">
+            {t('footer.madeWith')} ❤️ {t('footer.forCommunity')}
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };
